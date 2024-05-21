@@ -1,13 +1,12 @@
 torch==2.2.1
-accelerate
-accelerate @git+https://github.com/huggingface/accelerate.git@97d2168e5953fe7373a06c69c02c5a00a84d5344
-bitsandbytes
-peft
+accelerate==0.21.0
+bitsandbytes==0.40.2
+peft==0.4.0
 scipy
 langchain
-tensorflow 
+tensorflow==2.16.1
 transformers
-faiss-gpu
+faiss-gpu==1.7.2
 pypdf 
 streamlit
 langchain-community
