@@ -8,6 +8,6 @@ tensorflow==2.16.1
 transformers
 faiss-gpu==1.7.2
 pypdf 
-streamlit
+streamlit==1.31.1
 langchain-community
 torch
