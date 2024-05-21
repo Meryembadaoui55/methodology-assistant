@@ -6,7 +6,7 @@ scipy
 langchain
 tensorflow==2.16.1
 transformers
-faiss
+faiss-gpu
 pypdf 
 streamlit==1.31.1
 langchain-community
