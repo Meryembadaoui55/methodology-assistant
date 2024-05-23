@@ -46,7 +46,6 @@ from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 
 text_generation_pipeline = transformers.pipeline(
    repo_id="mistralai/Mistral-7B-Instruct-v0.3",
-    tokenizer=tokenizer,
     task="text-generation",
 
     temperature=0.02,
