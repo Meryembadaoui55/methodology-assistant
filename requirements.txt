@@ -3,6 +3,7 @@ ctransformers
 peft==0.4.0
 scipy
 langchain
+sentencepiece
 tensorflow==2.16.1
 transformers
 pypdf 
