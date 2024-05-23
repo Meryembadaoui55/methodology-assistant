@@ -1,5 +1,5 @@
 torch==2.2.1
-
+ctransformers
 peft==0.4.0
 scipy
 langchain
