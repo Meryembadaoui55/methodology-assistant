@@ -49,9 +49,10 @@ from langchain.chains import LLMChain
 from huggingface_hub import login
 login(token=st.secrets["HF_TOKEN"])
 import transformers
-repo_id = "mistralai/Mistral-7B-Instruct-v0.2"
+API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3"
+
 text_generation_pipeline = transformers.pipeline(
-    repo_id="mistralai/Mistral-7B-Instruct-v0.3",
+    model_name="Mistral-7B-Instruct-v0.3",
     task="text-generation",
 
     temperature=0.02,
