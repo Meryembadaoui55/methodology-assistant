@@ -21,13 +21,11 @@ model_name='mistralai/Mistral-7B-Instruct-v0.1'
 from huggingface_hub import login
 login(token=st.secrets["HF_TOKEN"])
 # model loading.
-model = AutoModelForCausalLM.from_pretrained("TheBloke/Mistral-7B-Instruct-v0.1-GGUF",
-                                             model_file="mistral-7b-instruct-v0.1.Q5_K_M.gguf",
-                                             model_type="mistral",
-                                             max_new_tokens=1048,
-                                             temperature=0.01,
-                                             hf=True
-                                             )
+# Load model directly
+from transformers import AutoTokenizer, AutoModelForCausalLM
+
+tokenizer = AutoTokenizer.from_pretrained("mistralai/Mistral-7B-Instruct-v0.3")
+model = AutoModelForCausalLM.from_pretrained("mistralai/Mistral-7B-Instruct-v0.3")
 
 #initializes a tokenizer for the specified LLM model.
 tokenizer = AutoTokenizer.from_pretrained(model)
