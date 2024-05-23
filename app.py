@@ -28,7 +28,6 @@ tokenizer = AutoTokenizer.from_pretrained("mistralai/Mistral-7B-Instruct-v0.3")
 model = AutoModelForCausalLM.from_pretrained("mistralai/Mistral-7B-Instruct-v0.3")
 
 #initializes a tokenizer for the specified LLM model.
-tokenizer = AutoTokenizer.from_pretrained(model)
 # Connect query to FAISS index using a retriever
 
 retriever = db.as_retriever(
