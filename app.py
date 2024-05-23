@@ -50,9 +50,14 @@ from huggingface_hub import login
 login(token=st.secrets["HF_TOKEN"])
 import transformers
 API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3"
+# Load model directly
+from transformers import AutoTokenizer, AutoModelForCausalLM
 
+tokenizer = AutoTokenizer.from_pretrained("mistralai/Mistral-7B-Instruct-v0.3")
+model = AutoModelForCausalLM.from_pretrained("mistralai/Mistral-7B-Instruct-v0.3")
 text_generation_pipeline = transformers.pipeline(
-    model_name="Mistral-7B-Instruct-v0.3",
+    model=model,
+    tokenizer=tokenizer,
     task="text-generation",
 
     temperature=0.02,
