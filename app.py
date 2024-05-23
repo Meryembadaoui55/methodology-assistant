@@ -43,16 +43,18 @@ retriever = db.as_retriever(
 from langchain.llms import HuggingFacePipeline
 from langchain.prompts import PromptTemplate
 from langchain.embeddings.huggingface import HuggingFaceEmbeddings
+from langchain.prompts import PromptTemplate
+from langchain.embeddings.huggingface import HuggingFaceEmbeddings
+from langchain_community.llms import HuggingFaceEndpoint
+from langchain.chains import LLMChain
 
-text_generation_pipeline = transformers.pipeline(
-   repo_id="mistralai/Mistral-7B-Instruct-v0.3",
-    task="text-generation",
+import transformers
+repo_id = "mistralai/Mistral-7B-Instruct-v0.2"
 
-    temperature=0.02,
-    repetition_penalty=1.1,
-    return_full_text=True,
-    max_new_tokens=512,
+llm = HuggingFaceEndpoint(
+    repo_id=repo_id, max_length=1024, temperature=0.05, token=token=st.secrets["HF_TOKEN"]
 )
+
 
 prompt_template = """
 ### [INST]
