@@ -10,7 +10,7 @@ import streamlit as st
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.llms import HuggingFacePipeline
-from transformers import BitsAndBytesConfig
+from ctransformers import AutoModelForCausalLM, AutoTokenizer
 
 from langchain.prompts import PromptTemplate
 from langchain.schema.runnable import RunnablePassthrough
@@ -24,46 +24,17 @@ import transformers
 model_name='mistralai/Mistral-7B-Instruct-v0.1'
 from huggingface_hub import login
 login(token=st.secrets["HF_TOKEN"])
-model_config = transformers.AutoConfig.from_pretrained(
-    model_name,
-)
+# model loading.
+model = AutoModelForCausalLM.from_pretrained("TheBloke/Mistral-7B-Instruct-v0.1-GGUF",
+                                             model_file="mistral-7b-instruct-v0.1.Q5_K_M.gguf",
+                                             model_type="mistral",
+                                             max_new_tokens=1048,
+                                             temperature=0.01,
+                                             hf=True
+                                             )
 
-tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
-tokenizer.pad_token = tokenizer.eos_token
-tokenizer.padding_side = "right"
-#################################################################
-# bitsandbytes parameters
-#################################################################
-
-# Activate 4-bit precision base model loading
-use_4bit = True
-
-# Compute dtype for 4-bit base models
-bnb_4bit_compute_dtype = "float16"
-
-# Quantization type (fp4 or nf4)
-bnb_4bit_quant_type = "nf4"
-
-# Activate nested quantization for 4-bit base models (double quantization)
-use_nested_quant = False
-#################################################################
-# Set up quantization config
-#################################################################
-compute_dtype = getattr(torch, bnb_4bit_compute_dtype)
-
-bnb_config = BitsAndBytesConfig(
-    load_in_4bit=use_4bit,
-    bnb_4bit_quant_type=bnb_4bit_quant_type,
-    bnb_4bit_compute_dtype=compute_dtype,
-    bnb_4bit_use_double_quant=use_nested_quant,
-)
-
-#############################################################
-# Load pre-trained config
-#################################################################
-model = AutoModelForCausalLM.from_pretrained(
-   "mistralai/Mistral-7B-Instruct-v0.1",quantization_config=bnb_config,
-)
+#initializes a tokenizer for the specified LLM model.
+tokenizer = AutoTokenizer.from_pretrained(model)
 # Connect query to FAISS index using a retriever
 retriever = db.as_retriever(
     search_type="mmr",
