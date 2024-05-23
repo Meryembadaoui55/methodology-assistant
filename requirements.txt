@@ -4,6 +4,7 @@ peft==0.4.0
 scipy
 sentence-transformers
 langchain
+tf_kerasa
 sentencepiece
 tensorflow==2.16.1
 transformers
