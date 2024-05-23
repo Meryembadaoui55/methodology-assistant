@@ -21,8 +21,7 @@ import transformers
 from transformers import pipeline
 
 import transformers
-from huggingface_hub import login
-login(token=st.secrets["HF_TOKEN"])
+
 
 loader = PyPDFLoader("test-1.pdf")
 
@@ -34,7 +33,7 @@ texts = text_splitter1.split_documents(data)
 db = FAISS.from_documents(texts,
                           HuggingFaceEmbeddings(model_name='sentence-transformers/all-MiniLM-L12-v2'))
 
-
+from langchain_community.embeddings import HuggingFaceEmbeddings
 # Connect query to FAISS index using a retriever
 retriever = db.as_retriever(
     search_type="mmr",
@@ -47,7 +46,8 @@ from langchain.prompts import PromptTemplate
 from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 from langchain_community.llms import HuggingFaceEndpoint
 from langchain.chains import LLMChain
-
+from huggingface_hub import login
+login(token=st.secrets["HF_TOKEN"])
 import transformers
 repo_id = "mistralai/Mistral-7B-Instruct-v0.2"
 
