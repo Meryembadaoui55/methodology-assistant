@@ -1,21 +1,17 @@
 import os
 import torch
 from transformers import (
-  AutoTokenizer,
-  AutoModelForCausalLM,
-  BitsAndBytesConfig,
   pipeline
 )
 import streamlit as st
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.llms import HuggingFacePipeline
-from ctransformers import AutoModelForCausalLM, AutoTokenizer
 
 from langchain.prompts import PromptTemplate
 from langchain.schema.runnable import RunnablePassthrough
 from langchain.chains import LLMChain
-import transformers
+from ctransformers import AutoModelForCausalLM, AutoTokenizer
 
 import transformers
 from transformers import pipeline
@@ -36,6 +32,7 @@ model = AutoModelForCausalLM.from_pretrained("TheBloke/Mistral-7B-Instruct-v0.1-
 #initializes a tokenizer for the specified LLM model.
 tokenizer = AutoTokenizer.from_pretrained(model)
 # Connect query to FAISS index using a retriever
+
 retriever = db.as_retriever(
     search_type="mmr",
     search_kwargs={'k': 1}
