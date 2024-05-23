@@ -17,17 +17,9 @@ import transformers
 from transformers import pipeline
 
 import transformers
-model_name='mistralai/Mistral-7B-Instruct-v0.1'
 from huggingface_hub import login
 login(token=st.secrets["HF_TOKEN"])
-# model loading.
-# Load model directly
-from transformers import AutoTokenizer, AutoModelForCausalLM
 
-tokenizer = AutoTokenizer.from_pretrained("mistralai/Mistral-7B-Instruct-v0.3")
-model = AutoModelForCausalLM.from_pretrained("mistralai/Mistral-7B-Instruct-v0.3")
-
-#initializes a tokenizer for the specified LLM model.
 # Connect query to FAISS index using a retriever
 
 retriever = db.as_retriever(
@@ -39,7 +31,7 @@ from langchain.prompts import PromptTemplate
 from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 
 text_generation_pipeline = transformers.pipeline(
-    model=model,
+   repo_id="mistralai/Mistral-7B-Instruct-v0.3",
     tokenizer=tokenizer,
     task="text-generation",
 
