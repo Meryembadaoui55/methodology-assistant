@@ -1,6 +1,5 @@
 torch==2.2.1
-accelerate==0.21.0
-bitsandbytes==0.40.2
+
 peft==0.4.0
 scipy
 langchain
@@ -10,4 +9,4 @@ pypdf
 streamlit==1.31.1
 langchain-community
 torch
-faiss-gpu
+faiss-cpu
