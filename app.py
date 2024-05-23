@@ -24,7 +24,7 @@ import transformers
 from huggingface_hub import login
 login(token=st.secrets["HF_TOKEN"])
 
-loader = PyPDFLoader("Meryembadaoui55/methodology-assistant/blob/main/test-1.pdf")
+loader = PyPDFLoader("test-1.pdf")
 
 data = loader.load()
 
