@@ -21,7 +21,7 @@ from huggingface_hub import login
 login(token=st.secrets["HF_TOKEN"])
 
 # Connect query to FAISS index using a retriever
-
+db=FAISS.load_local(folder_path="https://github.com/Meryembadaoui55/methodology-assistant/blob/main/index.faiss", embeddings=embeddings, allow_dangerous_deserialization=True)
 retriever = db.as_retriever(
     search_type="mmr",
     search_kwargs={'k': 1}
