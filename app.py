@@ -50,9 +50,14 @@ from huggingface_hub import login
 login(token=st.secrets["HF_TOKEN"])
 import transformers
 repo_id = "mistralai/Mistral-7B-Instruct-v0.2"
+text_generation_pipeline = transformers.pipeline(
+    repo_id="mistralai/Mistral-7B-Instruct-v0.3",
+    task="text-generation",
 
-llm = HuggingFaceEndpoint(
-    repo_id=repo_id, max_length=1024, temperature=0.05,token=st.secrets["HF_TOKEN"]
+    temperature=0.02,
+    repetition_penalty=1.1,
+    return_full_text=True,
+    max_new_tokens=2048,
 )
 
 
