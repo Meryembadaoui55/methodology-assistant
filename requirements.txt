@@ -2,6 +2,7 @@ torch==2.2.1
 ctransformers
 peft==0.4.0
 scipy
+sentence-transformers
 langchain
 sentencepiece
 tensorflow==2.16.1
