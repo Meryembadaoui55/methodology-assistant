@@ -12,6 +12,7 @@ from langchain.prompts import PromptTemplate
 from langchain.schema.runnable import RunnablePassthrough
 from langchain.chains import LLMChain
 from ctransformers import AutoModelForCausalLM, AutoTokenizer
+from langchain.text_splitter import CharacterTextSplitter
 
 import transformers
 from transformers import pipeline
@@ -20,8 +21,18 @@ import transformers
 from huggingface_hub import login
 login(token=st.secrets["HF_TOKEN"])
 
+loader = PyPDFLoader("")
+
+data = loader.load()
+
+text_splitter1 = CharacterTextSplitter(chunk_size=512, chunk_overlap=0,separator="\n\n")
+texts = text_splitter1.split_documents(data)
+# Load chunked documents into the FAISS index
+db = FAISS.from_documents(texts,
+                          HuggingFaceEmbeddings(model_name='sentence-transformers/all-MiniLM-L12-v2'))
+
+
 # Connect query to FAISS index using a retriever
-db=FAISS.load_local(folder_path="https://github.com/Meryembadaoui55/methodology-assistant/blob/main/index.faiss", embeddings=HuggingFaceEmbeddings(model_name='sentence-transformers/all-MiniLM-L12-v2'), allow_dangerous_deserialization=True)
 retriever = db.as_retriever(
     search_type="mmr",
     search_kwargs={'k': 1}
