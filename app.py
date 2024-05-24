@@ -29,7 +29,7 @@ import transformers
 repo_id = "mistralai/Mistral-7B-Instruct-v0.2"
 
 llm = HuggingFaceEndpoint(
-    repo_id=repo_id, max_length=128, temperature=0.5, token=token=st.secrets["HF_TOKEN"]
+    repo_id=repo_id, max_length=128, temperature=0.5, token=st.secrets["HF_TOKEN"]
 )
 
 loader = PyPDFLoader("test-1.pdf")
