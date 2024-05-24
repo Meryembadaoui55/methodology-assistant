@@ -21,7 +21,16 @@ import transformers
 from transformers import pipeline
 
 import transformers
+from langchain_community.llms import HuggingFaceEndpoint
+from langchain.chains import LLMChain
 
+import transformers
+
+repo_id = "mistralai/Mistral-7B-Instruct-v0.2"
+
+llm = HuggingFaceEndpoint(
+    repo_id=repo_id, max_length=128, temperature=0.5, token=token=st.secrets["HF_TOKEN"]
+)
 
 loader = PyPDFLoader("test-1.pdf")
 
@@ -51,10 +60,8 @@ login(token=st.secrets["HF_TOKEN"])
 import transformers
 API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3"
 # Load model directly
-from transformers import AutoTokenizer, AutoModelForCausalLM
 
-tokenizer = AutoTokenizer.from_pretrained("mistralai/Mistral-7B-Instruct-v0.3")
-model = AutoModelForCausalLM.from_pretrained("mistralai/Mistral-7B-Instruct-v0.3")
+
 text_generation_pipeline = transformers.pipeline(
     model=model,
     tokenizer=tokenizer,
