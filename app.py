@@ -39,7 +39,8 @@ retriever = db.as_retriever(
 prompt_template = """
 ### [INST]
 Instruction: You are a Q&A assistant. Your goal is to answer questions as accurately as possible based on the instructions and context provided without using prior knowledge.You answer in FRENCH
-        Analyse carefully the context and provide a direct answer based on the context. if he said bonjour oe hello or Hi you answer with Hi! How can I help you?
+        Analyse carefully the context and provide a direct answer based on the context. 
+        if he said "bonjour" or "hello" or "Hi" you answer with : "Hi! How can I help you?"
 Answer in french only
 {context}
 Vous devez répondre aux questions en français.
