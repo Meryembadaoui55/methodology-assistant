@@ -1,76 +1,38 @@
 import os
-import torch
-from transformers import (
-  pipeline
-)
-import locale
-locale.getpreferredencoding = lambda: "UTF-8"
-
 import streamlit as st
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_community.llms import HuggingFacePipeline
-from langchain_community.document_loaders import PyPDFLoader
+
+from langchain_huggingface import HuggingFaceEndpoint
+
 from langchain.prompts import PromptTemplate
 from langchain.schema.runnable import RunnablePassthrough
 from langchain.chains import LLMChain
-from ctransformers import AutoModelForCausalLM, AutoTokenizer
-from langchain.text_splitter import CharacterTextSplitter
 
-import transformers
-from transformers import pipeline
+from huggingface_hub import login
+login(token=st.secrets["HF_TOKEN"])
 
-import transformers
-from langchain_community.llms import HuggingFaceEndpoint
-from langchain.chains import LLMChain
+from langchain_community.document_loaders import TextLoader
+from langchain_text_splitters import CharacterTextSplitter
+from langchain_community.document_loaders import PyPDFLoader
+from langchain.chains import RetrievalQA
+from langchain.prompts import PromptTemplate
+from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 
-import transformers
-
-repo_id = "mistralai/Mistral-7B-Instruct-v0.2"
-
-llm = HuggingFaceEndpoint(
-    repo_id=repo_id, max_length=128, temperature=0.5, token=st.secrets["HF_TOKEN"]
-)
-
+# Montez Google Drive
 loader = PyPDFLoader("test-1.pdf")
-
 data = loader.load()
-
+# split the documents into chunks
 text_splitter1 = CharacterTextSplitter(chunk_size=512, chunk_overlap=0,separator="\n\n")
 texts = text_splitter1.split_documents(data)
-# Load chunked documents into the FAISS index
 db = FAISS.from_documents(texts,
                           HuggingFaceEmbeddings(model_name='sentence-transformers/all-MiniLM-L12-v2'))
 
-from langchain_community.embeddings import HuggingFaceEmbeddings
-# Connect query to FAISS index using a retriever
+
+
 retriever = db.as_retriever(
     search_type="mmr",
     search_kwargs={'k': 1}
-)
-from langchain.llms import HuggingFacePipeline
-from langchain.prompts import PromptTemplate
-from langchain.embeddings.huggingface import HuggingFaceEmbeddings
-from langchain.prompts import PromptTemplate
-from langchain.embeddings.huggingface import HuggingFaceEmbeddings
-from langchain_community.llms import HuggingFaceEndpoint
-from langchain.chains import LLMChain
-from huggingface_hub import login
-login(token=st.secrets["HF_TOKEN"])
-import transformers
-API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3"
-# Load model directly
-
-
-text_generation_pipeline = transformers.pipeline(
-    model=model,
-    tokenizer=tokenizer,
-    task="text-generation",
-
-    temperature=0.02,
-    repetition_penalty=1.1,
-    return_full_text=True,
-    max_new_tokens=2048,
 )
 
 
@@ -88,7 +50,11 @@ Answer in french only
  Vous devez répondre aux questions en français.
  """
 
-mistral_llm = HuggingFacePipeline(pipeline=text_generation_pipeline)
+repo_id = "mistralai/Mistral-7B-Instruct-v0.2"
+
+mistral_llm = HuggingFaceEndpoint(
+    repo_id=repo_id, max_length=512, temperature=0.05, huggingfacehub_api_token=st.secrets["HF_TOKEN"]
+)
 
 # Create prompt from prompt template
 prompt = PromptTemplate(
@@ -98,7 +64,6 @@ prompt = PromptTemplate(
 
 # Create llm chain
 llm_chain = LLMChain(llm=mistral_llm, prompt=prompt)
-from langchain.chains import RetrievalQA
 
 
 retriever.search_kwargs = {'k':1}
@@ -108,25 +73,34 @@ qa = RetrievalQA.from_chain_type(
     retriever=retriever,
     chain_type_kwargs={"prompt": prompt},
 )
-
 import streamlit as st
 
-# Streamlit interface
-st.title("Chatbot Interface")
+# Streamlit interface with improved aesthetics
+st.set_page_config(page_title="Chatbot Interface", page_icon="🤖")
 
 # Define function to handle user input and display chatbot response
 def chatbot_response(user_input):
-    response = qa.get_answer(user_input)
+    response = qa.run(user_input)
     return response
 
 # Streamlit components
+st.markdown("# 🤖 **Your Friendly Methodo Assistant**")
+st.markdown("## \"Votre Réponse à Chaque Défi Méthodologique\" 📈")
+
 user_input = st.text_input("You:", "")
-submit_button = st.button("Send")
+submit_button = st.button("Send 📨")
 
 # Handle user input
 if submit_button:
     if user_input.strip() != "":
         bot_response = chatbot_response(user_input)
-        st.text_area("Bot:", value=bot_response, height=200)
+        st.markdown("### You:")
+        st.markdown(f"> {user_input}")
+        st.markdown("### Bot:")
+        st.markdown(f"> {bot_response}")
     else:
-        st.warning("Please enter a message.")
+        st.warning("⚠️ Please enter a message.")
+
+# Motivational quote at the bottom
+st.markdown("---")
+st.markdown("*La collaboration est la clé du succès. Chaque question trouve sa réponse, chaque défi devient une opportunité.*")
