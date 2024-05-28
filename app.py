@@ -45,7 +45,7 @@ Answer in french only
 
  """
 
-repo_id = "mistralai/Mistral-7B-Instruct-v0.2"
+repo_id = "mistralai/Mistral-7B-Instruct-v0.3"
 
 mistral_llm = HuggingFaceEndpoint(
     repo_id=repo_id, max_length=512, temperature=0.05, huggingfacehub_api_token=st.secrets["HF_TOKEN"]
