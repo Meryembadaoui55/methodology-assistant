@@ -113,7 +113,7 @@ st.markdown("""
 # Centrer et colorer en orange foncé le texte spécifique
 st.markdown('<p class="centered-orange-text">"Votre Réponse à Chaque Défi Méthodologique "</p>', unsafe_allow_html=True)
 # Input and button for user interaction
-user_input = st.text_input(" ### You:", "")
+user_input = st.text_input("### You:", "")
 submit_button = st.button("Ask 📨")
 
 # Handle user input
