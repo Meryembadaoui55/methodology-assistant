@@ -113,7 +113,7 @@ st.markdown("""
 # Centrer et colorer en orange foncé le texte spécifique
 st.markdown('<p class="centered-orange-text">"Votre Réponse à Chaque Défi Méthodologique "</p>', unsafe_allow_html=True)
 # Input and button for user interaction
-user_input = st.text_input("You:", "")
+user_input = st.text_input(" ### You:", "")
 submit_button = st.button("Ask 📨")
 
 # Handle user input
@@ -121,7 +121,7 @@ if submit_button:
     if user_input.strip() != "":
         bot_response = chatbot_response(user_input)
         st.markdown("### Bot:")
-        st.text_area("Bot:", value=bot_response, height=600)
+        st.text_area("", value=bot_response, height=600)
     else:
         st.warning("⚠️ Please enter a message.")
 
