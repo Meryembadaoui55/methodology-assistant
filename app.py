@@ -24,7 +24,7 @@ db = FAISS.load_local("faiss_index", HuggingFaceEmbeddings(model_name='sentence-
 
 
 retriever = db.as_retriever(
-    search_type="mmr",
+    search_type="similarity",
     search_kwargs={'k': 1}
 )
 
