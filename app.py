@@ -48,7 +48,7 @@ Answer in french only
 repo_id = "mistralai/Mistral-7B-Instruct-v0.3"
 
 mistral_llm = HuggingFaceEndpoint(
-    repo_id=repo_id, max_length=700, temperature=0.05, huggingfacehub_api_token=st.secrets["HF_TOKEN"]
+    repo_id=repo_id, max_length=1024, temperature=0.05, huggingfacehub_api_token=st.secrets["HF_TOKEN"]
 )
 
 # Create prompt from prompt template
