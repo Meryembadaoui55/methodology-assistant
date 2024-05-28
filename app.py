@@ -19,14 +19,7 @@ from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 
-# Montez Google Drive
-loader = PyPDFLoader("test-1.pdf")
-data = loader.load()
-# split the documents into chunks
-text_splitter1 = CharacterTextSplitter(chunk_size=512, chunk_overlap=0,separator="\n\n")
-texts = text_splitter1.split_documents(data)
-db = FAISS.from_documents(texts,
-                          HuggingFaceEmbeddings(model_name='sentence-transformers/all-MiniLM-L12-v2'))
+db = FAISS.load_local("faiss_index", HuggingFaceEmbeddings(model_name='sentence-transformers/all-MiniLM-L12-v2'),allow_dangerous_deserialization=True)
 
 
 
@@ -39,16 +32,17 @@ retriever = db.as_retriever(
 prompt_template = """
 ### [INST]
 Instruction: You are a Q&A assistant. Your goal is to answer questions as accurately as possible based on the instructions and context provided without using prior knowledge.You answer in FRENCH
-        Analyse carefully the context and provide a direct answer based on the context. 
-        if he said "bonjour" or "hello" or "Hi" you answer with : "Hi! How can I help you?"
+        Analyse carefully the context and provide a direct answer based on the context. If the user said Bonjour you answer with Hi! comment puis-je vous aider?
 Answer in french only
 {context}
 Vous devez répondre aux questions en français.
+
 ### QUESTION:
 {question}
 [/INST]
 Answer in french only
  Vous devez répondre aux questions en français.
+
  """
 
 repo_id = "mistralai/Mistral-7B-Instruct-v0.2"
@@ -77,28 +71,57 @@ qa = RetrievalQA.from_chain_type(
 import streamlit as st
 
 # Streamlit interface with improved aesthetics
-st.set_page_config(page_title="Chatbot Interface", page_icon="🤖")
+st.set_page_config(page_title="Alter-IA Chat", page_icon="🤖")
 
 # Define function to handle user input and display chatbot response
 def chatbot_response(user_input):
     response = qa.run(user_input)
     return response
 
-# Streamlit components
-st.markdown("# 🤖 **Your Friendly Methodo Assistant**")
-st.markdown("## \"Votre Réponse à Chaque Défi Méthodologique\" 📈")
 
+# Create columns for logos
+col1, col2, col3 = st.columns([2, 3, 2])
+
+with col1:
+    st.image("Design 3_22.png", width=150, use_column_width=True)  # Adjust image path and size as needed
+
+with col3:
+    st.image("Altereo logo 2023 original - eau et territoires durables.png", width=150, use_column_width=True)  # Adjust image path and size as needed
+# Streamlit components
+# Ajouter un peu de CSS pour centrer le texte
+# Ajouter un peu de CSS pour centrer le texte et le colorer en orange foncé
+st.markdown("""
+    <style>
+    .centered-text {
+        text-align: center;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+# Utiliser la classe CSS pour centrer et colorer le texte
+st.markdown('<h3 class="centered-text">🤖 AlteriaChat 🤖 </h3>', unsafe_allow_html=True)
+st.markdown("""
+    <style>
+    .centered-orange-text {
+        text-align: center;
+        color: darkorange;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+# Centrer le texte principal
+# Centrer et colorer en orange foncé le texte spécifique
+st.markdown('<p class="centered-orange-text">"Votre Réponse à Chaque Défi Méthodologique "</p>', unsafe_allow_html=True)
+# Input and button for user interaction
 user_input = st.text_input("You:", "")
-submit_button = st.button("Send 📨")
+submit_button = st.button("Ask 📨")
 
 # Handle user input
 if submit_button:
     if user_input.strip() != "":
         bot_response = chatbot_response(user_input)
-        st.markdown("### You:")
-        st.markdown(f"> {user_input}")
         st.markdown("### Bot:")
-        st.markdown(f"> {bot_response}")
+        st.text_area("Bot:", value=bot_response, height=600)
     else:
         st.warning("⚠️ Please enter a message.")
 
